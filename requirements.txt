@@ -1,0 +1,7 @@
+# Step 1: numerical identifiability study — no NN frameworks allowed
+numpy==1.26.4
+scipy==1.13.1
+matplotlib==3.9.2
+pandas==2.2.3
+pytest==8.3.3
+PyYAML==6.0.2
