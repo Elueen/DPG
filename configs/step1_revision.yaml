@@ -1,0 +1,86 @@
+# =====================================================================
+# Step 1 REVISION 配置(第一轮 configs/step1_toy_game.yaml 原样封存不动)
+# 统一符号:theta_O = (w_s, kappa_s, kappa_e),sigma_eff,q_O(c; theta)
+# 模型谱系:
+#   M0a: legacy 第一轮,total-utility-scale additive noise
+#        sigma_eff^2 = 2*(1/ks + 1/ke)
+#   M0 : component-evaluation additive noise
+#        sigma_eff^2 = 2*(ws^2/ks + we^2/ke)
+#   M1 : perception-derived context-sensitive component uncertainty
+#        V1(c) = ws^2*Gs(c)/ks + we^2*Ge(c)/ke,G 由 f/z/Sigma 的
+#        derivative 计算,禁止在本文件中直写 G
+# =====================================================================
+
+meta:
+  seed: 42
+
+models: [m0a, m0, m1]
+
+# ---------------------------------------------------------------------
+# perception:identification toy functions(非最终真实驾驶 utility)
+#   safety: 中心化 logistic(关于 shift 奇对称,梯度偶对称——
+#           insufficient 家族的符号翻转技巧依赖该性质)
+#   efficiency: softplus(梯度单调)
+#   sigma: evidence 感知噪声的方差尺度 Sigma_k(eta_k ~ N(0, Sigma_k/kappa_k))
+#   grad_step: G_k 数值微分(中心差分)步长
+# ---------------------------------------------------------------------
+perception:
+  f:
+    safety:     {type: logistic, amplitude: 2.0, scale: 0.8, shift: 0.0}
+    efficiency: {type: softplus, amplitude: 1.0, scale: 1.0, shift: 0.0}
+  sigma:
+    safety: 1.0
+    efficiency: 1.0
+  grad_step: 1.0e-5
+
+# ---------------------------------------------------------------------
+# context 家族(每家族 3 个 context;a1=yield, a0=hold;
+# a_E 已吸收进 context 定义——每个 context 即"给定 ego 候选动作与场景")
+# 设计意图(数值均已在开发端验证):
+#   strong_diversity:      G_s/G_e 跨 context 变化 4 个数量级(166 / 0.01 / 1.8)
+#   moderate_diversity:    G_s/G_e 温和变化(1.53 / 1.38 / 0.93)
+#   insufficient_diversity:G_s、G_e 跨 context 相同至数值微分精度(负对照;
+#     效率侧 evidence 固定,安全侧只做符号翻转,logistic 梯度偶对称保 G 不变,
+#     Δu_s 仍随 context 变化,故 context 间 mu 可分而 precision 载荷不可分)
+# ---------------------------------------------------------------------
+context_families:
+  strong_diversity:
+    safety_sensitive:
+      safety:     {a1: 0.15, a0: -0.25}
+      efficiency: {a1: -2.8, a0: -3.3}
+    efficiency_sensitive:
+      safety:     {a1: 3.3,  a0: 2.8}
+      efficiency: {a1: 0.35, a0: -0.25}
+    mixed:
+      safety:     {a1: 0.45, a0: -0.05}
+      efficiency: {a1: 0.1,  a0: -0.6}
+  moderate_diversity:
+    ctx_a:
+      safety:     {a1: 0.3,  a0: -0.2}
+      efficiency: {a1: 0.25, a0: -0.35}
+    ctx_b:
+      safety:     {a1: 1.0,  a0: 0.4}
+      efficiency: {a1: 0.1,  a0: -0.7}
+    ctx_c:
+      safety:     {a1: 0.1,  a0: -0.8}
+      efficiency: {a1: 0.6,  a0: 0.05}
+  insufficient_diversity:
+    ctx_a:
+      safety:     {a1: 0.5,  a0: -0.3}
+      efficiency: {a1: 0.35, a0: -0.3}
+    ctx_b:
+      safety:     {a1: 0.5,  a0: 0.3}
+      efficiency: {a1: 0.35, a0: -0.3}
+    ctx_c:
+      safety:     {a1: -0.5, a0: 0.3}
+      efficiency: {a1: 0.35, a0: -0.3}
+
+# ---------------------------------------------------------------------
+# R1 数值一致性检查参数
+#   lin_mc: 线性化 MC vs 解析(同一模型,只剩抽样误差)
+#   full_mc: 全非线性感知 MC vs 解析(量化一阶 Taylor 误差;
+#     开发端校准:kappa in [0.5, 200] 内最大偏差 3.9e-3 概率单位)
+# ---------------------------------------------------------------------
+consistency_checks:
+  lin_mc:  {n_samples: 4000000, tol: 1.0e-3}
+  full_mc: {n_samples: 4000000, tol_working_range: 6.0e-3, kappa_probe: [0.5, 3.0, 30.0]}
