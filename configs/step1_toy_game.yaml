@@ -1,0 +1,127 @@
+# =====================================================================
+# Step 1 玩具博弈:全部科学参数与实验参数
+# 纪律:任何脚本不得内嵌魔法数字,一律从本文件读取
+# =====================================================================
+
+meta:
+  seed: 42
+
+# ---------------------------------------------------------------------
+# C1. 2x2 玩具博弈定义
+# payoff 矩阵索引约定:[ego_action, opponent_action]
+# 即 行 = ego ∈ {merge, wait},列 = opponent ∈ {yield, hold}
+# 每个玩家 × 每个分量一张 2x2 表
+# ---------------------------------------------------------------------
+game:
+  ego_actions: [merge, wait]
+  opponent_actions: [yield, hold]
+  components: [safety, efficiency]   # 顺序即 (分量0, 分量1),c = disp(分量0)/disp(分量1)
+  payoffs:
+    ego:
+      safety:                 # merge 遇 hold 有冲突风险;wait 总体安全
+        - [ 0.5, -1.0]        # merge:  [vs yield, vs hold]
+        - [ 1.0,  0.8]        # wait:   [vs yield, vs hold]
+      efficiency:             # merge 抢先高效;wait 损失效率
+        - [ 1.0,  0.3]
+        - [-0.5, -0.8]
+    opponent:
+      safety:
+        - [ 0.6, -1.0]
+        - [ 0.9,  1.0]
+      efficiency:             # yield 减速损效率;hold 保速
+        - [-0.6,  0.2]
+        - [-0.4,  1.0]
+
+# ---------------------------------------------------------------------
+# 情境参数 c:控制两分量在动作组合间的离散度之比
+#   c = std(u_safety) / std(u_efficiency)   (每个玩家分别成立)
+# 缩放保均值,且保持两分量离散度几何均值不变(整体尺度不变)
+# ---------------------------------------------------------------------
+situations:
+  safety_dominant: 3.0
+  balanced: 1.0
+  efficiency_dominant: 0.3333333333
+
+# ---------------------------------------------------------------------
+# C2. component-probit 响应
+# noise_form: separable = 分量级 payoff 无关噪声(默认)
+#   注意其结构性含义:kappa 仅通过 tau^2 = 2*sum(1/kappa) 进入选择概率,
+#   见 docs/step1_findings.md
+# cross_check: 解析 vs Monte Carlo 互检参数(测试使用)
+#   mc_samples 为总样本数(antithetic 配对,须为偶数)
+# ---------------------------------------------------------------------
+response:
+  noise_form: separable
+  cross_check:
+    mc_samples: 40000000
+    chunk_size: 2000000
+    tol: 1.0e-4
+
+# ---------------------------------------------------------------------
+# C3. damped fixed-point 均衡求解
+#   damping:   x <- (1-a)x + a*T(x) 的 a
+#   tol:       残差 sup-norm 收敛阈值
+#   match_tol: 多起点结果聚类容差(多重均衡检测)
+#   n_starts:  随机起点个数(另加 1 个均匀策略起点;纪律要求 >= 10)
+# ---------------------------------------------------------------------
+solver:
+  damping: 0.5
+  tol: 1.0e-10
+  max_iter: 10000
+  n_starts: 12
+  match_tol: 1.0e-6
+
+# ---------------------------------------------------------------------
+# C4. 网格扫描
+# 角色语义(与理论路线的对应,留档):
+#   被扫描/被推断方 = opponent(周车画像),网格为其 (w_s, kappa_s, kappa_e),
+#   w_e = 1 - w_s。ego 画像固定 = 两步法辨识中"对手条件选择概率已知"
+#   假设的数值对应;ego 是观测者与决策者,不是被推断对象。
+# ego_profiles:主实验只用 main_ego_profile(中性观测者基准);
+#   robustness_ego_profiles 仅用于 robustness_grid_n^3 粗网格的
+#   等价脊线拓扑鲁棒性检查(结构稳定即可,不要求数值一致)。
+# ---------------------------------------------------------------------
+scan:
+  ego_profiles:
+    baseline:      {w: [0.5, 0.5], kappa: [3.0, 3.0]}
+    safety_biased: {w: [0.7, 0.3], kappa: [3.0, 3.0]}
+    low_precision: {w: [0.5, 0.5], kappa: [1.0, 1.0]}
+  main_ego_profile: baseline
+  robustness_ego_profiles: [safety_biased, low_precision]
+  situations_to_scan: [safety_dominant, balanced, efficiency_dominant]
+  grid:
+    w_s:     {min: 0.0, max: 1.0,  n: 50, spacing: linear}
+    kappa_s: {min: 0.1, max: 30.0, n: 50, spacing: log}
+    kappa_e: {min: 0.1, max: 30.0, n: 50, spacing: log}
+  robustness_grid_n: 15
+
+# ---------------------------------------------------------------------
+# C5. 等价类分析
+# 可观测量 = opponent 的均衡选择概率 q*(角色定案后的口径,见 findings)
+# tol:观测等价阈值,|q*(theta) - q*(theta_ref)| < tol(概率单位)
+# situation_order:累积交集顺序(1 情境 -> 前 2 情境 -> 前 3 情境)
+# reference_points:参考画像(吸附到最近网格点)
+# ---------------------------------------------------------------------
+equivalence:
+  tol: 0.01
+  situation_order: [balanced, safety_dominant, efficiency_dominant]
+  reference_points:
+    cautious_low_prec:  {w_s: 0.7, kappa_s: 1.0, kappa_e: 1.0}
+    cautious_high_prec: {w_s: 0.7, kappa_s: 8.0, kappa_e: 8.0}
+    efficient_mid:      {w_s: 0.3, kappa_s: 3.0, kappa_e: 3.0}
+
+# ---------------------------------------------------------------------
+# C6. 观测长度模拟
+# 观测模型:opponent 在均衡策略 q* 下的 N 次独立选择(Binomial)
+# 观测预算口径:单情境版全部 N 次来自 single_situation;
+#   多情境版同一总预算 N 按 situation_order 尽量均分(余数给靠前情境)
+# 置信集合:似然比 {theta: logL >= max logL - chi2(confidence_level, df=3)/2}
+# true_points:引用 equivalence.reference_points 的键(好/中/坏辨识条件对照)
+# ---------------------------------------------------------------------
+observation:
+  n_values: [10, 30, 100, 300, 1000]
+  n_replicates: 20
+  confidence_level: 0.95
+  single_situation: balanced
+  true_points: [cautious_high_prec, efficient_mid, cautious_low_prec]
+  prob_clip: 1.0e-12
