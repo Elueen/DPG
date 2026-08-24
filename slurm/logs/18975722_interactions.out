@@ -1,0 +1,27 @@
+config hash = 5ff6b782;rollout 输入 1123 个 interactions (onset=lat_vel, valid & kin_physical)
+
+== C4 sanity ==
+a_peak 实现 = 配置值:True;jerk 上界解析吻合:True
+速度地板钳位事件:11/1123
+Δgap_end:解析(无钳位)= 4.00 m,中位 = 4.00 m,最小 = -0.00 m
+
+hold 分支负 gap(碰撞风险信号,合法输入)逐 segment:
+  highd_dense_rec13          0.000  (min_gap_H 中位  16.97 m)
+  highd_free_flow_rec03      0.000  (min_gap_H 中位  13.37 m)
+  ngsim_i80_15min            0.105  (min_gap_H 中位   6.93 m)
+  ngsim_us101_15min          0.030  (min_gap_H 中位  12.10 m)
+
+== 预注册敏感性(a_peak x horizon)==
+ a_peak  horizon_s  delta_gap_end_mean  delta_gap_end_sd  min_gap_Y_mean  min_gap_H_mean  events_clamped
+    0.7        3.0               1.571             0.076          14.917          14.231               5
+    0.7        4.0               2.791             0.141          14.281          13.111               9
+    0.7        5.0               4.358             0.233          13.740          11.991              11
+    1.0        3.0               2.242             0.115          15.159          14.231              11
+    1.0        4.0               3.982             0.222          14.660          13.111              11
+    1.0        5.0               6.216             0.375          14.265          11.991              17
+    1.3        3.0               2.912             0.161          15.371          14.231              11
+    1.3        4.0               5.171             0.316          14.979          13.111              18
+    1.3        5.0               8.064             0.543          14.667          11.991              35
+
+rollouts -> /net/scratch/j90633xl/DPG/data/pilot/counterfactual_rollouts.csv.gz
+完成。

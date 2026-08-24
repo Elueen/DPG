@@ -51,3 +51,7 @@ data/*
 !data/.gitkeep
 outputs/*
 !outputs/.gitkeep
+
+# ---- Tooling / cluster ----
+.claude/
+slurm-*.out

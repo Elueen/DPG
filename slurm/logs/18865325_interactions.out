@@ -1,0 +1,46 @@
+config hash = e391d436;labeled 行 3572(主口径 onset=lat_vel:1125)
+
+== 标签比例(onset=lat_vel)==
+definition   segment                        n   yield    hold   ambig
+d1_decel     highd_dense_rec13            106   0.170   0.670   0.160
+d1_decel     highd_free_flow_rec03         27   0.148   0.815   0.037
+d1_decel     ngsim_i80_15min              552   0.409   0.408   0.183
+d1_decel     ngsim_us101_15min            440   0.286   0.561   0.152
+d2_gap       highd_dense_rec13            106   0.170   0.632   0.198
+d2_gap       highd_free_flow_rec03         27   0.111   0.704   0.185
+d2_gap       ngsim_i80_15min              552   0.304   0.556   0.139
+d2_gap       ngsim_us101_15min            440   0.200   0.675   0.125
+d3_compound  highd_dense_rec13            106   0.264   0.594   0.142
+d3_compound  highd_free_flow_rec03         27   0.185   0.704   0.111
+d3_compound  ngsim_i80_15min              552   0.457   0.400   0.143
+d3_compound  ngsim_us101_15min            440   0.316   0.557   0.127
+
+== 定义两两一致率(非 ambiguous 共同子集)==
+d1_decel|d2_gap            agree=0.966 (n=846)
+           yield  hold  ambiguous
+yield        269    29         76
+hold           0   548         17
+ambiguous      8   113         65 
+
+d1_decel|d3_compound       agree=1.000 (n=922)
+           yield  hold  ambiguous
+yield        374     0          0
+hold           0   548         17
+ambiguous     50     0        136 
+
+d2_gap|d3_compound         agree=0.966 (n=854)
+           yield  hold  ambiguous
+yield        277     0          0
+hold          29   548        113
+ambiguous    118     0         40 
+
+== ±30% 阈值敏感性(标签翻转比例)==
+d1_decel     x0.7 -> flip 0.126;x1.3 -> flip 0.102
+d2_gap       x0.7 -> flip 0.078;x1.3 -> flip 0.054
+d3_compound  x0.7 -> flip 0.102;x1.3 -> flip 0.091
+
+corr(dv_red, a_end) = 0.796
+
+labels -> /net/scratch/j90633xl/DPG/data/pilot/action_labels.csv
+完成。
+目检图 36 张 -> /net/scratch/j90633xl/DPG/outputs/step2/action_validation

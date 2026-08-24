@@ -1,0 +1,2 @@
+flatpak: /opt/apps/apps/binapps/anaconda3/2023.09/lib/libcrypto.so.3: version `OPENSSL_3.4.0' not found (required by /lib64/libostree-1.so.1)
+flatpak: /opt/apps/apps/binapps/anaconda3/2023.09/lib/libcrypto.so.3: version `OPENSSL_3.4.0' not found (required by /lib64/librpmio.so.9)

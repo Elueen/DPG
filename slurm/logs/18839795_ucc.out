@@ -1,0 +1,6 @@
+[highd_free_flow_rec03] rows=121218 vehicles=914 density_proxy=12.0
+[highd_dense_rec13] rows=417404 vehicles=2949 density_proxy=39.0
+[ngsim_i80_15min] rows=1172935 vehicles=1967 dup_frames=0.0000
+[ngsim_us101_15min] rows=1151501 vehicles=2168 dup_frames=0.0000
+inventory -> /net/scratch/j90633xl/DPG/docs/step2_data_inventory.md
+完成。

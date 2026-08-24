@@ -10,4 +10,5 @@
 module load apps/binapps/anaconda3/2023.09
 source activate dpg
 cd /net/scratch/j90633xl/DPG
-python experiments/step2/run_interactions.py
+python experiments/step2/run_action_labels.py
+python experiments/step2/run_action_validation.py

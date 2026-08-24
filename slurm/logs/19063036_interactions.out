@@ -1,0 +1,37 @@
+config hash = 14ccab6d;events = 1123
+
+== evidence 分布(H 分支;P5/P50/P95)==
+  highd_dense_rec13          g_tilde [-20.78, -7.46, 29.06]  c_tilde [-8.09, -1.12, 5.76]
+  highd_free_flow_rec03      g_tilde [-19.82, -6.01, 38.84]  c_tilde [-14.81, -9.39, 6.36]
+  ngsim_i80_15min            g_tilde [-10.06, 0.56, 19.73]  c_tilde [-3.56, 0.55, 4.57]
+  ngsim_us101_15min          g_tilde [-10.25, 0.65, 32.35]  c_tilde [-4.68, -0.54, 3.35]
+
+== u^raw 分布(逐 segment,H 分支;P5/P50/P95)==
+  highd_dense_rec13          u_s [-0.974, -0.659, 0.992]  u_e [-0.975, -0.816, 0.158]
+  highd_free_flow_rec03      u_s [-0.987, -0.538, 0.999]  u_e [-0.994, -0.989, -0.05]
+  ngsim_i80_15min            u_s [-0.868, -0.008, 0.957]  u_e [-0.91, -0.548, 0.372]
+  ngsim_us101_15min          u_s [-0.815, 0.036, 0.997]  u_e [-0.942, -0.442, 0.407]
+
+== 饱和 / 近常数 ==
+  u_s: 饱和比例=0.110  sd=0.629  near_constant=False
+  u_e: 饱和比例=0.053  sd=0.421  near_constant=False
+
+== Δu^raw 分布(逐 segment;P5/P50/P95)==
+  highd_dense_rec13          Δu_s [0.0002, 0.0063, 0.4335]  Δu_e [-0.1985, -0.0544, -0.0081]
+  highd_free_flow_rec03      Δu_s [0.0, 0.0002, 0.0564]  Δu_e [-0.1627, -0.0036, -0.0019]
+  ngsim_i80_15min            Δu_s [0.002, 0.1037, 0.4178]  Δu_e [-0.1981, -0.1223, -0.0275]
+  ngsim_us101_15min          Δu_s [0.0002, 0.0462, 0.3769]  Δu_e [-0.199, -0.1439, -0.0187]
+
+Δu_s>=0 比例 1.000;Δu_e<=0 比例 1.000;Δu_s≈0(退化)比例 0.006
+
+== 冗余 / 近共线 ==
+  corr_us_ue_H = -0.130
+  corr_us_ue_Y = -0.101
+  corr_dus_due = -0.262
+  corr_gtilde_ctilde_H = -0.145
+
+诊断 TTC(t0,封顶60s):P5/P50/P95 = [3.4, 37.2, 60.0]
+梯度互检(对 zeta,含 a_g/a_c/a_e 链式因子):max_err = 8.11e-11(tol 1e-06)-> PASS
+
+utilities -> /net/scratch/j90633xl/DPG/data/pilot/utilities_raw.csv
+完成。

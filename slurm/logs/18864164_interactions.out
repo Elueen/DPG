@@ -1,0 +1,20 @@
+config hash = f513865b
+
+segment                    onset       events  valid  invalid 原因
+highd_dense_rec13          compound       316    106  ego_coverage:168, gap0_out_of_range:24, no_opponent:7, onset_not_found:10, opp_lane_change:1
+highd_dense_rec13          fixed_lead     316    135  ego_coverage:153, gap0_out_of_range:22, no_opponent:5, opp_lane_change:1
+highd_dense_rec13          lat_vel        316    106  ego_coverage:168, gap0_out_of_range:24, no_opponent:7, onset_not_found:10, opp_lane_change:1
+highd_free_flow_rec03      compound       119     27  ego_coverage:63, gap0_out_of_range:13, no_opponent:10, onset_not_found:6
+highd_free_flow_rec03      fixed_lead     119     36  ego_coverage:59, gap0_out_of_range:13, no_opponent:11
+highd_free_flow_rec03      lat_vel        119     27  ego_coverage:63, gap0_out_of_range:13, no_opponent:10, onset_not_found:6
+ngsim_i80_15min            compound       863    529  ego_coverage:96, gap0_out_of_range:40, no_opponent:16, onset_not_found:159, opp_coverage:1, opp_lane_change:22
+ngsim_i80_15min            fixed_lead     863    678  ego_coverage:89, gap0_out_of_range:48, no_opponent:22, opp_coverage:1, opp_lane_change:25
+ngsim_i80_15min            lat_vel        863    552  ego_coverage:96, gap0_out_of_range:41, no_opponent:16, onset_not_found:135, opp_coverage:1, opp_lane_change:22
+ngsim_us101_15min          compound       902    429  ego_coverage:103, gap0_out_of_range:26, no_opponent:77, onset_not_found:239, opp_coverage:8, opp_lane_change:20
+ngsim_us101_15min          fixed_lead     902    507  ego_coverage:184, gap0_out_of_range:29, no_opponent:155, opp_coverage:4, opp_lane_change:23
+ngsim_us101_15min          lat_vel        902    440  ego_coverage:105, gap0_out_of_range:26, no_opponent:80, onset_not_found:217, opp_coverage:9, opp_lane_change:25
+
+共同 valid 事件 1050 个;|t0(fixed_lead) - t0(lat_vel)| 中位 = 0.70s
+
+interactions -> /net/scratch/j90633xl/DPG/data/pilot/interactions.csv
+完成。

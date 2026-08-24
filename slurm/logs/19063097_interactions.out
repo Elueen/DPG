@@ -1,0 +1,42 @@
+config hash = 14ccab6d;events = 1123(numerical smoke test,非 Step 3 empirical analysis)
+
+== G4 冒烟检查 ==
+  all_finite: True
+  no_nan: True
+  G_nonneg: True
+  G_not_all_zero: True
+  no_explosion_G_max: 4.5264903777515055
+  du_not_all_degenerate: True
+
+== 四量分布(P5/P50/P95)==
+  du_s  [0.0002, 0.0662, 0.4103]
+  du_e  [-0.1988, -0.1221, -0.0108]
+  G_s   [0.0003, 1.1176, 2.117]
+  G_e   [0.0065, 0.759, 1.9505]
+
+逐 segment G 中位:
+  highd_dense_rec13          G_s=0.2073  G_e=0.1549
+  highd_free_flow_rec03      G_s=0.0497  G_e=0.0007
+  ngsim_i80_15min            G_s=1.4860  G_e=0.7612
+  ngsim_us101_15min          G_s=0.9869  G_e=1.0450
+
+== Sigma alpha-linearity(抽 50 事件,应精确等于 alpha)==
+  alpha=0.5: max|ratio - alpha| = 0.00e+00
+  alpha=2.0: max|ratio - alpha| = 0.00e+00
+
+== 随机 10 行 sanity ==
+                    event_id   du_s    du_e    G_s    G_e
+ngsim_us101_15min|1612|484.0 0.0016 -0.0436 1.7137 0.0996
+  ngsim_i80_15min|2192|689.8 0.0820 -0.0278 1.7865 0.0407
+    ngsim_i80_15min|124|82.4 0.0021 -0.0555 1.5086 0.1610
+  highd_dense_rec13|256|81.4 0.5078 -0.0992 2.6692 0.5055
+ngsim_us101_15min|1321|400.7 0.0098 -0.1742 0.2864 1.5126
+ ngsim_us101_15min|396|118.3 0.3453 -0.1188 1.5085 0.7190
+ngsim_us101_15min|1407|412.8 0.0350 -0.0605 1.3699 0.1910
+ngsim_us101_15min|1255|367.8 0.0010 -0.1043 0.8180 0.5575
+   ngsim_i80_15min|447|190.7 0.0770 -0.1958 0.8641 1.8935
+ngsim_us101_15min|1210|342.4 0.0030 -0.1738 0.0004 1.5060
+
+=> G SMOKE PASS
+m1_quantities -> /net/scratch/j90633xl/DPG/data/pilot/m1_quantities.csv
+完成。

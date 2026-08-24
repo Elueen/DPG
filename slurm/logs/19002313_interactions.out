@@ -1,0 +1,30 @@
+config hash = b622624f;events = 1123
+
+== u^raw 分布(逐 segment,H 分支;P5/P50/P95)==
+  highd_dense_rec13          u_s [-0.962, -0.53, 0.995]  u_e [-0.975, -0.816, 0.158]
+  highd_free_flow_rec03      u_s [-0.981, -0.381, 0.999]  u_e [-0.994, -0.989, -0.05]
+  ngsim_i80_15min            u_s [-0.809, 0.19, 0.971]  u_e [-0.91, -0.548, 0.372]
+  ngsim_us101_15min          u_s [-0.736, 0.232, 0.998]  u_e [-0.942, -0.442, 0.407]
+
+== 饱和 / 近常数 ==
+  u_s: 饱和比例=0.113  sd=0.611  near_constant=False
+  u_e: 饱和比例=0.053  sd=0.421  near_constant=False
+
+== Δu^raw 分布(逐 segment;P5/P50/P95)==
+  highd_dense_rec13          Δu_s [0.0002, 0.0084, 0.4991]  Δu_e [-0.1985, -0.0544, -0.0081]
+  highd_free_flow_rec03      Δu_s [0.0, 0.0003, 0.1152]  Δu_e [-0.1627, -0.0036, -0.0019]
+  ngsim_i80_15min            Δu_s [0.0016, 0.0946, 0.5227]  Δu_e [-0.1981, -0.1223, -0.0275]
+  ngsim_us101_15min          Δu_s [0.0001, 0.0436, 0.459]  Δu_e [-0.199, -0.1439, -0.0187]
+
+Δu_s>=0 比例 1.000;Δu_e<=0 比例 1.000;Δu_s≈0(退化)比例 0.007
+
+== 冗余 / 近共线 ==
+  corr_us_ue_H = -0.147
+  corr_us_ue_Y = -0.105
+  corr_dus_due = -0.269
+
+诊断 TTC(t0,封顶60s):P5/P50/P95 = [3.4, 37.2, 60.0]
+梯度互检:max_err = 1.67e-11(tol 1e-06) -> PASS
+
+utilities -> /net/scratch/j90633xl/DPG/data/pilot/utilities_raw.csv
+完成。

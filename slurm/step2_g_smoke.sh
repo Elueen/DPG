@@ -1,5 +1,5 @@
 #!/bin/bash --login
-#SBATCH --job-name=dpg_interactions
+#SBATCH --job-name=g_smoke
 #SBATCH --partition=multicore
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=2
@@ -10,4 +10,4 @@
 module load apps/binapps/anaconda3/2023.09
 source activate dpg
 cd /net/scratch/j90633xl/DPG
-python experiments/step2/run_interactions.py
+python experiments/step2/run_g_smoke.py
