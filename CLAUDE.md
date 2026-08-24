@@ -1,12 +1,17 @@
 # DPG 项目约定(Claude Code 每 session 必读)
 
 ## 项目状态
-- Step 1/2 已关闭(tags: step1-revision-complete, step2-complete)。
+- Step 1/2 已关闭(tag: step2-complete;Step 1 无独立 tag:
+  git 历史自本仓库初始化起,Step 1 结论见 docs/step1_findings.md
+  与 step1_revision_findings.md)。
 - 当前:Step 3(real-context identifiability)。任务书见
   docs/step3 任务书(用户提供);split 提案已批准:docs/step3_split_proposal.md。
-- Step 2 冻结件(禁改):src/m1_interface.py 及其上游
-  (canonical/interactions/actions/counterfactual/evidence/utility)、
-  configs/step2_pilot.yaml(hash 14ccab6d)、六份 docs/step2_*.md spec。
+
+## 冻结件清单(禁改)
+- src/m1_interface.py 及其上游
+  (canonical/interactions/actions/counterfactual/evidence/utility)。
+- configs/step2_pilot.yaml(hash 14ccab6d)。
+- 六份 docs/step2_*.md spec。
 
 ## 纪律(违反即返工)
 - 科学参数只进 config(step3 用 configs/step3.yaml);seed=42;
